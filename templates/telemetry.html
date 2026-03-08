@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h1>TELEMETRY DATA</h1><p>Real-time spacecraft signal and sensor readings</p><div class="bar"></div></div>
+<div class="two-col">
+    <div class="card">
+        <div class="card-title">+ Log Telemetry</div>
+        <form method="POST" action="/telemetry/add">
+            <div class="form-group"><label>Telemetry ID</label><input name="telemetryId" placeholder="e.g. T004" required></div>
+            <div class="form-group"><label>Mission</label>
+                <select name="missionId">
+                    {% for m in missions %}<option value="{{ m.missionid }}">{{ m.mname }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label>Signal Strength (%)</label><input type="number" step="0.01" name="signalStrength" required></div>
+            <div class="form-group"><label>Temperature (C)</label><input type="number" step="0.01" name="temperature" required></div>
+            <div class="form-group"><label>Transmission Time</label><input type="datetime-local" name="transmissionTime" required></div>
+            <button type="submit" class="btn-add">+ LOG TELEMETRY</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">Records ({{ telemetry|length }})</div>
+        <table>
+            <thead><tr><th>ID</th><th>Mission</th><th>Signal</th><th>Temp</th><th>Timestamp</th></tr></thead>
+            <tbody>
+            {% for t in telemetry %}
+                <tr>
+                    <td>{{ t.telemetryid }}</td>
+                    <td>{{ t.mname or t.missionid }}</td>
+                    <td>
+                        <div class="signal-bar">
+                            <div class="signal-fill" style="width:{{ t.signalstrength }}%;background:{% if t.signalstrength > 70 %}#00ff9f{% elif t.signalstrength > 40 %}#ffd700{% else %}#ff4444{% endif %}"></div>
+                        </div>
+                        {{ t.signalstrength }}%
+                    </td>
+                    <td style="color:{% if t.temperature < 0 %}#60a0ff{% elif t.temperature > 50 %}#ff6060{% else %}#cce0ff{% endif %}">{{ t.temperature }}C</td>
+                    <td>{{ t.transmissiontime }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

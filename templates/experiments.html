@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h1>EXPERIMENTS</h1><p>Scientific research registry and equipment tracking</p><div class="bar"></div></div>
+<div class="two-col">
+    <div class="card">
+        <div class="card-title">+ Add Experiment</div>
+        <form method="POST" action="/experiments/add">
+            <div class="form-group"><label>Exp ID</label><input name="expId" placeholder="e.g. E004" required></div>
+            <div class="form-group"><label>Experiment Name</label><input name="expName" required></div>
+            <div class="form-group"><label>Domain</label><input name="domain" required></div>
+            <div class="form-group"><label>Equipment (comma separated)</label><input name="equipment" placeholder="Microscope, Centrifuge"></div>
+            <button type="submit" class="btn-add">+ ADD EXPERIMENT</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">Experiments ({{ experiments|length }})</div>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Domain</th><th>Equipment</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for e in experiments %}
+                <tr>
+                    <td>{{ e.expid }}</td><td>{{ e.expname }}</td>
+                    <td><span class="badge badge-domain">{{ e.domain }}</span></td>
+                    <td>{{ e.equipment or '—' }}</td>
+                    <td><a href="/experiments/delete/{{ e.expid }}" class="btn-del" onclick="return confirm('Delete?')">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

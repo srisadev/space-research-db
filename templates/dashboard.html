@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <h1>MISSION CONTROL</h1>
+    <p>Space Research Organization — Database Management System</p>
+    <div class="bar"></div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">[M]</div>
+        <div class="stat-num" style="color:#00ff9f">{{ mission_count }}</div>
+        <div class="stat-label">MISSIONS</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">[S]</div>
+        <div class="stat-num" style="color:#60a0ff">{{ spacecraft_count }}</div>
+        <div class="stat-label">SPACECRAFT</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">[A]</div>
+        <div class="stat-num" style="color:#ffd700">{{ astronaut_count }}</div>
+        <div class="stat-label">ASTRONAUTS</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">[E]</div>
+        <div class="stat-num" style="color:#ff9060">{{ experiment_count }}</div>
+        <div class="stat-label">EXPERIMENTS</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Recent Missions</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Mission ID</th><th>Name</th><th>Status</th>
+                <th>Launch Date</th><th>Spacecraft</th><th>Control Center</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for m in recent_missions %}
+            <tr>
+                <td>{{ m.missionid }}</td>
+                <td>{{ m.mname }}</td>
+                <td><span class="badge badge-{{ m.mstatus.lower() }}">{{ m.mstatus }}</span></td>
+                <td>{{ m.launchdate }}</td>
+                <td>{{ m.cname or '—' }}</td>
+                <td>{{ m.centername or '—' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

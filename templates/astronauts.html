@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h1>ASTRONAUTS</h1><p>Personnel profiles and skills registry</p><div class="bar"></div></div>
+<div class="two-col">
+    <div class="card">
+        <div class="card-title">+ Add Astronaut</div>
+        <form method="POST" action="/astronauts/add">
+            <div class="form-group"><label>Astronaut ID</label><input name="astronautId" placeholder="e.g. A005" required></div>
+            <div class="form-group"><label>First Name</label><input name="firstName" required></div>
+            <div class="form-group"><label>Last Name</label><input name="lastName" required></div>
+            <div class="form-group"><label>Date of Birth</label><input type="date" name="dob" required></div>
+            <div class="form-group"><label>Nationality</label><input name="nationality" required></div>
+            <div class="form-group"><label>Skills (comma separated)</label><input name="skills" placeholder="EVA, Navigation, Medical"></div>
+            <button type="submit" class="btn-add">+ ADD ASTRONAUT</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">Crew Roster ({{ astronauts|length }})</div>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Nationality</th><th>Skills</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for a in astronauts %}
+                <tr>
+                    <td>{{ a.astronautid }}</td>
+                    <td>{{ a.firstname }} {{ a.lastname }}</td>
+                    <td>{{ a.age|int }}</td>
+                    <td>{{ a.nationality }}</td>
+                    <td>{% if a.skills %}{% for s in a.skills.split(', ') %}<span class="badge badge-skill">{{ s }}</span>{% endfor %}{% endif %}</td>
+                    <td><a href="/astronauts/delete/{{ a.astronautid }}" class="btn-del" onclick="return confirm('Delete?')">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

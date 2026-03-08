@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>MISSIONS</h1>
+    <p>Manage space mission lifecycle, status and assignments</p>
+    <div class="bar"></div>
+</div>
+
+<div class="two-col">
+    <div class="card">
+        <div class="card-title">+ Add Mission</div>
+        <form method="POST" action="/missions/add">
+            <div class="form-group"><label>Mission ID</label><input name="missionId" placeholder="e.g. M004" required></div>
+            <div class="form-group"><label>Mission Name</label><input name="mName" required></div>
+            <div class="form-group"><label>Status</label>
+                <select name="mStatus">
+                    <option>Planned</option><option>Active</option>
+                    <option>Completed</option><option>Aborted</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Launch Date</label><input type="date" name="launchDate" required></div>
+            <div class="form-group"><label>Spacecraft</label>
+                <select name="craftId">
+                    <option value="">— None —</option>
+                    {% for s in spacecraft %}<option value="{{ s.craftid }}">{{ s.cname }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label>Control Center</label>
+                <select name="centerId">
+                    <option value="">— None —</option>
+                    {% for c in centers %}<option value="{{ c.centerid }}">{{ c.centername }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label>Monitoring Shift</label><input name="monitoringShift" placeholder="Day / Night / Swing"></div>
+            <button type="submit" class="btn-add">+ ADD MISSION</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-title">All Missions ({{ missions|length }})</div>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Status</th><th>Launch</th><th>Spacecraft</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for m in missions %}
+                <tr>
+                    <td>{{ m.missionid }}</td>
+                    <td>{{ m.mname }}</td>
+                    <td><span class="badge badge-{{ m.mstatus.lower() }}">{{ m.mstatus }}</span></td>
+                    <td>{{ m.launchdate }}</td>
+                    <td>{{ m.cname or '—' }}</td>
+                    <td><a href="/missions/delete/{{ m.missionid }}" class="btn-del" onclick="return confirm('Delete?')">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

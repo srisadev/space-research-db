@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header"><h1>SPACECRAFT</h1><p>Fleet registry — dimensions decomposed from composite attribute</p><div class="bar"></div></div>
+<div class="two-col">
+    <div class="card">
+        <div class="card-title">+ Add Spacecraft</div>
+        <form method="POST" action="/spacecraft/add">
+            <div class="form-group"><label>Craft ID</label><input name="craftId" placeholder="e.g. SC004" required></div>
+            <div class="form-group"><label>Name</label><input name="cName" required></div>
+            <div class="form-group"><label>Manufacturer</label><input name="manufacturer" required></div>
+            <div class="form-group"><label>Fuel Type</label><input name="fuelType" required></div>
+            <div class="form-group"><label>Length (m)</label><input type="number" step="0.01" name="length"></div>
+            <div class="form-group"><label>Width (m)</label><input type="number" step="0.01" name="width"></div>
+            <div class="form-group"><label>Height (m)</label><input type="number" step="0.01" name="height"></div>
+            <button type="submit" class="btn-add">+ ADD SPACECRAFT</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-title">Fleet ({{ spacecraft|length }})</div>
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Manufacturer</th><th>Fuel</th><th>L x W x H</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for s in spacecraft %}
+                <tr>
+                    <td>{{ s.craftid }}</td><td>{{ s.cname }}</td>
+                    <td>{{ s.manufacturer }}</td><td>{{ s.fueltype }}</td>
+                    <td>{{ s.length }}m x {{ s.width }}m x {{ s.height }}m</td>
+                    <td><a href="/spacecraft/delete/{{ s.craftid }}" class="btn-del" onclick="return confirm('Delete?')">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
